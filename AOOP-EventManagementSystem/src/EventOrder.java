@@ -28,7 +28,7 @@ public class EventOrder {
     }
 
     public void addTicket(Ticket ticket) {
-        tickets.add(ticket)
+        tickets.add(ticket);
     }
 
     public void calculateTotal() {
@@ -47,7 +47,7 @@ public class EventOrder {
         return tickets;
     }
 
-    Override
+    @Override
     public String toString() {
         return "EventOrder{" +
                 "orderNumber=" + orderNumber +
