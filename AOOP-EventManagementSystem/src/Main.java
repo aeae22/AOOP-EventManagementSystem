@@ -1,4 +1,4 @@
-package model;
+import model.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,7 +13,7 @@ public class Main {
         Attendee attendee = new Attendee(
                 "Alice Johnson",
                 "alice@example.com",
-                "123 model.Main Street"
+                "123 Main Street"
         );
 
         TicketCart cart = new TicketCart();

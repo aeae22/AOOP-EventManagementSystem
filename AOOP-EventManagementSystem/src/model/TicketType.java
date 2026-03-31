@@ -1,3 +1,5 @@
+package model;
+
 public class TicketType {
     private String name;
     private double priceMultiplier;
@@ -29,7 +31,7 @@ public class TicketType {
 
     @Override
     public String toString() {
-        return "TicketType{" +
+        return "model.TicketType{" +
                 "name='" + name + '\'' +
                 ", priceMultiplier=" + priceMultiplier +
                 '}';

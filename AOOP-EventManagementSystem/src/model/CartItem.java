@@ -1,3 +1,5 @@
+package model;
+
 public class CartItem {
     private Event event;
     private TicketType ticketType;
@@ -31,7 +33,7 @@ public class CartItem {
 
     @Override
     public String toString() {
-        return "CartItem{" +
+        return "model.CartItem{" +
                 "event=" + event.getTitle() +
                 ", ticketType=" + ticketType.getName() +
                 ", quantity=" + quantity +

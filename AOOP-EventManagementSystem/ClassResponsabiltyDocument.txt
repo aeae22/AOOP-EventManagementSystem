@@ -2,15 +2,15 @@
                                         By Joaquin Villon, Sajan Satyal and Keval Raval
 
 
-1- Event
+1- model.Event
 Role: Represents an event with a title, date, base price, and available ticket types
 Responsibility: It stores event information and keeps track of how many events were created
 
-2- Attendee
+2- model.Attendee
 Role: Represents a person attending or booking an event.
 Responsibility: Stores the attendees personal information
 
-3- Ticket Type
+3- model.Ticket Type
 Role: Represents a category of ticket
 Responsibility: Stores the ticket type name and price multiplier, and calculates the ticket price.
 
@@ -18,14 +18,14 @@ Responsibility: Stores the ticket type name and price multiplier, and calculates
 Role: Represents one item inside the cart
 Responsibility: Connects an evnt, a ticket type, a quantity and calculates the total price for the item
 
-5- Ticket Cart
+5- model.Ticket Cart
 Role: Represents the attendees shopping cart before the order is finished
 Responsibility: It stores cart items, allows tickets to be added or removed, also calculates the total price of the cart
 
-6- Ticket
+6- model.Ticket
 Role: Represents a purchased ticket in an order.
 Responsibility: Stores the event, ticket type, and quantity, and calculates total cost of the ticket entry
 
-7- Event Order
+7- model.Event Order
 Role: Represents a completed event order
 Responsibility: It stores the order number, attendee, tickets, order date, and the total cost of the order.

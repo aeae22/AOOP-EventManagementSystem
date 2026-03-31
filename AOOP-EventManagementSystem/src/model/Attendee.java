@@ -1,3 +1,5 @@
+package model;
+
 public class Attendee {
     private String name;
     private String email;
@@ -35,7 +37,7 @@ public class Attendee {
 
     @Override
     public String toString() {
-        return "Attendee{" +
+        return "model.Attendee{" +
                 "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", address='" + address + '\'' +
