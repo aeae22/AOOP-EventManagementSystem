@@ -1,5 +1,6 @@
 package view;
 
+import utils.FileExportUtil;
 import controller.AttendeeController;
 import controller.EventController;
 import controller.RegistrationController;
@@ -9,6 +10,7 @@ import model.EventOrder;
 import model.TicketCart;
 import model.TicketType;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class MainMenuView {
@@ -34,6 +36,7 @@ public class MainMenuView {
                 System.out.println("1. Add event");
                 System.out.println("2. View events");
                 System.out.println("3. Register attendee");
+                System.out.println("4. Export attendee list");
                 System.out.println("0. Exit");
                 System.out.print("Choose an option: ");
 
@@ -48,6 +51,9 @@ public class MainMenuView {
                         break;
                     case 3:
                         registerAttendee();
+                        break;
+                    case 4:
+                        exportAttendees();
                         break;
                     case 0:
                         System.out.println("Exiting program...");
@@ -162,6 +168,45 @@ public class MainMenuView {
             System.out.println(order);
         } catch (NumberFormatException e) {
             System.out.println("Invalid number format.");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private void exportAttendees() {
+        try {
+            System.out.print("Enter event title: ");
+            String eventTitle = scanner.nextLine();
+
+            Event event = eventController.findEventByTitle(eventTitle);
+
+            if (event == null) {
+                System.out.println("Event not found.");
+                return;
+            }
+
+            System.out.println("Choose export format:");
+            System.out.println("1. TXT");
+            System.out.println("2. CSV");
+            System.out.print("Your choice: ");
+            int formatChoice = Integer.parseInt(scanner.nextLine());
+
+            System.out.print("Enter file name: ");
+            String fileName = scanner.nextLine();
+
+            if (formatChoice == 1) {
+                FileExportUtil.exportAttendeesToTXT(event, fileName);
+                System.out.println("Attendees exported to TXT successfully.");
+            } else if (formatChoice == 2) {
+                FileExportUtil.exportAttendeesToCSV(event, fileName);
+                System.out.println("Attendees exported to CSV successfully.");
+            } else {
+                System.out.println("Invalid export format.");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("Invalid number format.");
+        } catch (IOException e) {
+            System.out.println("Error writing file: " + e.getMessage());
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
