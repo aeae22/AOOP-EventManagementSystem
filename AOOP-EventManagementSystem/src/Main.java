@@ -1,3 +1,5 @@
+package model;
+
 public class Main {
     public static void main(String[] args) {
         Event event = new Event("Tech Conference", "2026-04-10", 100.0, 3);
@@ -11,7 +13,7 @@ public class Main {
         Attendee attendee = new Attendee(
                 "Alice Johnson",
                 "alice@example.com",
-                "123 Main Street"
+                "123 model.Main Street"
         );
 
         TicketCart cart = new TicketCart();
