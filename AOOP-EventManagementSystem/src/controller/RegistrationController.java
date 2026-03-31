@@ -1,5 +1,6 @@
 package controller;
 
+import exception.EventFullException;
 import model.Attendee;
 import model.CartItem;
 import model.Event;
@@ -16,7 +17,7 @@ public class RegistrationController {
         this.attendeeController = attendeeController;
     }
 
-    public EventOrder checkout(Attendee attendee, TicketCart cart, String orderDate) {
+    public EventOrder checkout(Attendee attendee, TicketCart cart, String orderDate) throws EventFullException {
         attendeeController.addAttendee(attendee);
 
         EventOrder order = new EventOrder(attendee, orderDate);
@@ -24,11 +25,11 @@ public class RegistrationController {
         for (CartItem item : cart.getItems()) {
             Event event = item.getEvent();
 
-            Ticket ticket = new Ticket(
-                    item.getEvent(),
-                    item.getTicketType(),
-                    item.getQuantity()
-            );
+            if (event.getAttendees().size() >= event.getCapacity()) {
+                throw new EventFullException("Cannot register. Event is full: " + event.getTitle());
+            }
+
+            Ticket ticket = new Ticket(event, item.getTicketType(), item.getQuantity());
 
             order.addTicket(ticket);
             event.addAttendee(attendee);
