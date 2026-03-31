@@ -1,4 +1,4 @@
-package exception;
+package view;
 
 public class MainMenuView {
 }
