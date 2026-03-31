@@ -6,12 +6,16 @@ public class Event {
     private double basePrice;
     private ArrayList<TicketType> ticketTypes;
     private static int totalEvents = 0;
+    private int capacity;
+    private ArrayList<Attendee> attendees;
 
-    public Event(String title, String date, double basePrice) {
+    public Event(String title, String date, double basePrice, int capacity) {
         this.title = title;
         this.date = date;
         this.basePrice = basePrice;
+        this.capacity = capacity;
         this.ticketTypes = new ArrayList<>();
+        this.attendees = new ArrayList<>();
         totalEvents++;
     }
 
@@ -39,6 +43,22 @@ public class Event {
         this.basePrice = basePrice;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
+    }
+
+    public ArrayList<Attendee> getAttendees() {
+        return attendees;
+    }
+
+    public void addAttendee(Attendee attendee) {
+        attendees.add(attendee);
+    }
+
     public void addTicketType(TicketType type) {
         ticketTypes.add(type);
     }
@@ -57,6 +77,8 @@ public class Event {
                 "title='" + title + '\'' +
                 ", date='" + date + '\'' +
                 ", basePrice=" + basePrice +
+                ", capacity=" + capacity +
+                ", attendees=" + attendees.size() +
                 ", ticketTypes=" + ticketTypes.size() +
                 '}';
     }

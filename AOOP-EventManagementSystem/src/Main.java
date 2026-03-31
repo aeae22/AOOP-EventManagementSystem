@@ -1,6 +1,6 @@
 public class Main {
     public static void main(String[] args) {
-        Event event = new Event("Tech Conference", "2026-04-10", 100.0);
+        Event event = new Event("Tech Conference", "2026-04-10", 100.0, 3);
 
         TicketType regular = new TicketType("Regular", 1.0);
         TicketType vip = new TicketType("VIP", 1.5);
