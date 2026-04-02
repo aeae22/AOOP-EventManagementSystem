@@ -1,3 +1,4 @@
+//Validates registration rules and event capacity constraints//
 package controller;
 
 import exception.EventFullException;
