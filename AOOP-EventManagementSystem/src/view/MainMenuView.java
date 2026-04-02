@@ -188,6 +188,7 @@ public class MainMenuView {
             System.out.println("Choose export format:");
             System.out.println("1. TXT");
             System.out.println("2. CSV");
+            System.out.println("3. JSON");
             System.out.print("Your choice: ");
             int formatChoice = Integer.parseInt(scanner.nextLine());
 
@@ -200,6 +201,9 @@ public class MainMenuView {
             } else if (formatChoice == 2) {
                 FileExportUtil.exportAttendeesToCSV(event, fileName);
                 System.out.println("Attendees exported to CSV successfully.");
+            } else if (formatChoice == 3) {
+                FileExportUtil.exportAttendeesToJSON(event, fileName);
+                System.out.println("Attendees exported to JSON successfully.");
             } else {
                 System.out.println("Invalid export format.");
             }

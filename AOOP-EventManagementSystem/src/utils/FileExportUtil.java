@@ -37,4 +37,33 @@ public class FileExportUtil {
 
         writer.close();
     }
+
+    public static void exportAttendeesToJSON(Event event, String fileName) throws IOException {
+        PrintWriter writer = new PrintWriter(new FileWriter(fileName));
+
+        writer.println("{");
+        writer.println("  \"eventTitle\": \"" + event.getTitle() + "\",");
+        writer.println("  \"date\": \"" + event.getDate() + "\",");
+        writer.println("  \"attendees\": [");
+
+        for (int i = 0; i < event.getAttendees().size(); i++) {
+            Attendee attendee = event.getAttendees().get(i);
+
+            writer.println("    {");
+            writer.println("      \"name\": \"" + attendee.getName() + "\",");
+            writer.println("      \"email\": \"" + attendee.getEmail() + "\",");
+            writer.println("      \"address\": \"" + attendee.getAddress() + "\"");
+
+            if (i == event.getAttendees().size() - 1) {
+                writer.println("    }");
+            } else {
+                writer.println("    },");
+            }
+        }
+
+        writer.println("  ]");
+        writer.println("}");
+
+        writer.close();
+    }
 }
