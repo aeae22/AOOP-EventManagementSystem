@@ -1,3 +1,4 @@
+//Utility for exporting data to TXT, CSV, and JSON//
 package utils;
 
 import model.Attendee;
