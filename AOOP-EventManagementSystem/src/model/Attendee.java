@@ -1,3 +1,4 @@
+// Finalized Model for Iteration 2 - Logic for data encapsulation//
 package model;
 
 public class Attendee {
