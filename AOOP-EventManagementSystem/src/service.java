@@ -16,7 +16,7 @@ public class EventService {
     }
 
     public void addEvent(Event event) {
-        // Business Logic: You can add validation here
+        
         eventDatabase.add(event);
     }
 
