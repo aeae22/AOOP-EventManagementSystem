@@ -44,4 +44,8 @@ public class EventService {
         existing.setBasePrice(updatedEvent.getBasePrice());
         existing.setCapacity(updatedEvent.getCapacity());
         return eventRepository.save(existing);
+    }
+
+    public void deleteEvent(Long id) {
+        eventRepository.deleteById(id);
     }}
