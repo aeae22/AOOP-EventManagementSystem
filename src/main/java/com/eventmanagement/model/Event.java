@@ -1,6 +1,7 @@
 package com.eventmanagement.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ public class Event {
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<TicketType> ticketTypes = new ArrayList<>();
 
-    @JsonManagedReference("event-attendee")
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "event_attendee",
