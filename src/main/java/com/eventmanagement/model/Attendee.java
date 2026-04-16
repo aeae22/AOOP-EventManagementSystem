@@ -1,5 +1,6 @@
 package com.eventmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ public class Attendee {
     private String email;
     private String address;
 
+    @JsonBackReference("event-attendee")
     @ManyToMany(mappedBy = "attendees")
     private List<Event> events = new ArrayList<>();
 

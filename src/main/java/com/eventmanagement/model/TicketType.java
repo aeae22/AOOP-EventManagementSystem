@@ -1,5 +1,6 @@
 package com.eventmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,6 +14,7 @@ public class TicketType {
     private String name;
     private double priceMultiplier;
 
+    @JsonBackReference("event-tickettype")
     @ManyToOne
     @JoinColumn(name = "event_id")
     private Event event;

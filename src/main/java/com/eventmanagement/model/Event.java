@@ -1,5 +1,6 @@
 package com.eventmanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +18,16 @@ public class Event {
     private double basePrice;
     private int capacity;
 
+    @JsonManagedReference("event-tickettype")
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL)
     private List<TicketType> ticketTypes = new ArrayList<>();
 
+    @JsonManagedReference("event-attendee")
     @ManyToMany
     @JoinTable(
-        name = "event_attendee",
-        joinColumns = @JoinColumn(name = "event_id"),
-        inverseJoinColumns = @JoinColumn(name = "attendee_id")
+            name = "event_attendee",
+            joinColumns = @JoinColumn(name = "event_id"),
+            inverseJoinColumns = @JoinColumn(name = "attendee_id")
     )
     private List<Attendee> attendees = new ArrayList<>();
 

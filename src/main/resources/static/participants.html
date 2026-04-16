@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Participants</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <span class="brand">EventMS</span>
+  <a href="index.html">Events</a>
+  <a href="create-event.html">Create Event</a>
+  <a href="register.html">Register</a>
+  <a href="participants.html">Participants</a>
+</nav>
+
+<div class="container">
+  <h1>Event Participants</h1>
+  <div id="message"></div>
+
+  <div style="display:flex; gap:12px; margin-bottom:24px; align-items:flex-end;">
+    <div style="flex:1;">
+      <label style="display:block; margin-bottom:6px; font-weight:bold; color:#2c3e50;">Select Event</label>
+      <select id="eventSelect" style="width:100%; padding:10px 12px; border:1px solid #ccc; border-radius:6px; font-size:14px;">
+        <option value="">-- Select an Event --</option>
+      </select>
+    </div>
+    <button class="btn btn-primary" onclick="loadParticipants()">View Participants</button>
+  </div>
+
+  <div id="participants-container">
+    <p class="empty">Select an event to view its participants.</p>
+  </div>
+</div>
+
+<script>
+  const API = 'http://localhost:8080/api';
+
+  async function loadEvents() {
+    try {
+      const res = await fetch(`${API}/events`);
+      const events = await res.json();
+      const select = document.getElementById('eventSelect');
+      events.forEach(event => {
+        const option = document.createElement('option');
+        option.value = event.id;
+        option.textContent = `${event.title} (${event.date})`;
+        select.appendChild(option);
+      });
+
+      // Auto load if eventId is in URL
+      const params = new URLSearchParams(window.location.search);
+      const eventId = params.get('eventId');
+      if (eventId) {
+        select.value = eventId;
+        loadParticipants();
+      }
+    } catch (err) {
+      document.getElementById('participants-container').innerHTML =
+              '<p class="empty">Error loading events.</p>';
+    }
+  }
+
+  async function loadParticipants() {
+    const eventId = document.getElementById('eventSelect').value;
+    if (!eventId) {
+      document.getElementById('participants-container').innerHTML =
+              '<p class="empty">Please select an event first.</p>';
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API}/events/${eventId}`);
+      const event = await res.json();
+      const participants = event.attendees;
+      const container = document.getElementById('participants-container');
+
+      if (!participants || participants.length === 0) {
+        container.innerHTML = `<p class="empty">No participants registered for <strong>${event.title}</strong> yet.</p>`;
+        return;
+      }
+
+      container.innerHTML = `
+                <h2>${event.title} — ${participants.length} Participant(s)</h2>
+                <br>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Address</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${participants.map((p, i) => `
+                            <tr>
+                                <td>${i + 1}</td>
+                                <td>${p.name}</td>
+                                <td>${p.email}</td>
+                                <td>${p.address}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+    } catch (err) {
+      document.getElementById('participants-container').innerHTML =
+              '<p class="empty">Error loading participants.</p>';
+    }
+  }
+
+  loadEvents();
+</script>
+
+</body>
+</html>

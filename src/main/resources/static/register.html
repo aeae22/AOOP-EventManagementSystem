@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register Participant</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<nav>
+  <span class="brand">EventMS</span>
+  <a href="index.html">Events</a>
+  <a href="create-event.html">Create Event</a>
+  <a href="register.html">Register</a>
+  <a href="participants.html">Participants</a>
+</nav>
+
+<div class="container">
+  <h1>Register Participant</h1>
+  <div id="message"></div>
+
+  <form id="register-form">
+    <h2>Attendee Details</h2>
+
+    <label>Full Name</label>
+    <input type="text" id="name" placeholder="e.g. John Doe" required>
+
+    <label>Email</label>
+    <input type="email" id="email" placeholder="e.g. john@gmail.com" required>
+
+    <label>Address</label>
+    <input type="text" id="address" placeholder="e.g. 123 Main Street" required>
+
+    <h2 style="margin-top: 10px;">Event & Ticket</h2>
+
+    <label>Select Event</label>
+    <select id="eventSelect" required>
+      <option value="">-- Select an Event --</option>
+    </select>
+
+    <label>Select Ticket Type</label>
+    <select id="ticketTypeSelect" required>
+      <option value="">-- Select Ticket Type --</option>
+    </select>
+
+    <label>Quantity</label>
+    <input type="number" id="quantity" placeholder="e.g. 1" min="1" value="1" required>
+
+    <label>Order Date</label>
+    <input type="date" id="orderDate" required>
+
+    <button type="submit" class="btn btn-primary">Register</button>
+  </form>
+</div>
+
+<script>
+  const API = 'http://localhost:8080/api';
+
+  function showMessage(text, type) {
+    const msg = document.getElementById('message');
+    msg.innerHTML = `<div class="message ${type}">${text}</div>`;
+    setTimeout(() => msg.innerHTML = '', 5000);
+  }
+
+  async function loadEvents() {
+    try {
+      const res = await fetch(`${API}/events`);
+      const events = await res.json();
+      const select = document.getElementById('eventSelect');
+      events.forEach(event => {
+        const option = document.createElement('option');
+        option.value = event.id;
+        option.textContent = `${event.title} (${event.date})`;
+        option.dataset.ticketTypes = JSON.stringify(event.ticketTypes);
+        select.appendChild(option);
+      });
+    } catch (err) {
+      showMessage('Error loading events.', 'error');
+    }
+  }
+
+  document.getElementById('eventSelect').addEventListener('change', function () {
+    const selected = this.options[this.selectedIndex];
+    const ticketTypes = JSON.parse(selected.dataset.ticketTypes || '[]');
+    const ticketSelect = document.getElementById('ticketTypeSelect');
+    ticketSelect.innerHTML = '<option value="">-- Select Ticket Type --</option>';
+    ticketTypes.forEach(tt => {
+      const option = document.createElement('option');
+      option.value = tt.id;
+      option.textContent = `${tt.name} (x${tt.priceMultiplier} price)`;
+      ticketSelect.appendChild(option);
+    });
+  });
+
+  document.getElementById('register-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const address = document.getElementById('address').value;
+    const eventId = document.getElementById('eventSelect').value;
+    const ticketTypeId = document.getElementById('ticketTypeSelect').value;
+    const quantity = document.getElementById('quantity').value;
+    const orderDate = document.getElementById('orderDate').value;
+
+    if (!eventId || !ticketTypeId) {
+      showMessage('Please select an event and ticket type.', 'error');
+      return;
+    }
+
+    try {
+      // Step 1: Create attendee
+      const attendeeRes = await fetch(`${API}/attendees`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, address })
+      });
+
+      if (!attendeeRes.ok) {
+        showMessage('Failed to create attendee.', 'error');
+        return;
+      }
+
+      const attendee = await attendeeRes.json();
+
+      // Step 2: Register to event
+      const registerRes = await fetch(
+              `${API}/registrations?eventId=${eventId}&attendeeId=${attendee.id}&ticketTypeId=${ticketTypeId}&quantity=${quantity}&orderDate=${orderDate}`,
+              { method: 'POST' }
+      );
+
+      if (registerRes.ok) {
+        showMessage('Registration successful!', 'success');
+        document.getElementById('register-form').reset();
+        document.getElementById('ticketTypeSelect').innerHTML = '<option value="">-- Select Ticket Type --</option>';
+      } else {
+        showMessage('Registration failed. Event may be full.', 'error');
+      }
+    } catch (err) {
+      showMessage('Error connecting to backend.', 'error');
+    }
+  });
+
+  loadEvents();
+</script>
+
+</body>
+</html>
